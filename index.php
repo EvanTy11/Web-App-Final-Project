@@ -24,6 +24,9 @@
             }
         }
     ?>
+    <!-- Class checks if there are no albums if not displays message if their are albums in the album directory
+    it displays the album names 
+          -->
     <div class="container">
         <header class="unit">
             <h1 class="unit"><?php echo (count($albums) == 0) ? "No Albums Found" : basename($albums[$selected]); ?></h1>
@@ -43,8 +46,13 @@
                 ?>
             </nav>
         </header>
+        <!-- Check to see if albums has any folders in the directory if so the $images array
+            grabs all image files in each folder when it is selected and stores them then it checks if their are images
+            in the folder and then displays the images with the required format
+             -->
         <main class="flex-list unit">
             <?php
+          
                 if(count($albums) == 0)
                 {
                     echo "<em>Albums support pngs, jpgs, and gifs.</em>";
@@ -67,14 +75,17 @@
                 }
             ?>
         </main>
+
+        
         <footer class="unit">
             
             <form action = '' method = 'POST' enctype = 'multipart/form-data'>
             Choose a file to upload<input type='file' name = 'imgselect'> <br> <br>
-            Choose a directoryyou wish to upload to:<select name="directory" id="d" size="1">
+            Choose a directory you wish to upload to:<select name="directory" id="d" size="1">
                 <?php
                    foreach($albums as $album){
                 ?>
+                <option hidden selected>Select one...</option>
                 <option value="<?php echo basename($album,".jpeg")?>">
                             <?php echo basename($album,".jpeg");?>
                         </option>
@@ -82,16 +93,44 @@
                    }
                         ?>
                 </select><br /><br>
-            <input type= 'submit' name = 'submit'>
-         
+            Click to upload to Directory<input type= 'submit' name = 'submit'><br>
+
+                 <form action = '' method = 'POST' enctype = 'multipart/form-data'>
+            Choose the file wish to delete:<select name="imagedel" id="d" size="1" >
+                <?php
+                   foreach($images as $image){
+                ?>
+                <option hidden selected>Select one...</option>
+                <option value="<?php echo $image ?>">
+                            <?php echo basename($image,".jpeg");?>
+                        </option>
+                        <?php
+                   }
+                        ?>
+                </select><br /><br>
+            Image to be deleted<input type= 'submit' name = 'submit'>
 
             <?php
+            /*Checks if aything in submit if there is it grabs the data from the POST array and the 
+                unlink method grabs the image and the image format and passes it through and deletes
+                the specified file pased by the user
+                        */
+            if(isset($_POST["submit"])) {         
+             $imagedel = $_POST['imagedel'];
+             if (unlink($imagedel)) {
+                echo 'The file ' . $imagedel. ' was deleted successfully!';
+            } else {
+                echo 'There was a error deleting the file ' . $image;
+            }
+            header("Refresh:0");
+            }
+
           if(isset($_POST["submit"]))
           {
             $directory = $_POST['directory'];
             $image = $_FILES['imgselect'];
             move_uploaded_file($image['tmp_name'],"albums/$directory/".$image['name']);
-            header("Refresh:0");
+            
           }
         
             ?>

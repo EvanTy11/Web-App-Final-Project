@@ -5,6 +5,7 @@
 
 html, body {
     box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 *,
@@ -23,12 +24,12 @@ body {
 }
 
 .container {
-    border-style: solid;
-    border-width: 2px;
+    border-style: double;
+    border-width: 5px;
     border-radius: 25px;
-    border-color: rgb(240, 240, 240);
-    box-shadow: 0 0 0 6px rgb(240, 240, 240);
+    border-color: black;
     margin: 25px;
+    color: black;
 }
 
 .unit {
